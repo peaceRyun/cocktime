@@ -1,13 +1,12 @@
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 
-// 우리가 만든 화면 컴포넌트들을 불러옵니다.
 import HomeScreen from './src/screens/HomeScreen';
-import DetailsScreen from './src/screens/DetailsScreen';
+import InputScreen from './src/screens/InputScreen';
+import OutputScreen from './src/screens/OutputScreen';
+import MatchInfoScreen from './src/screens/MatchInfoScreen';
 
-// 스택 내비게이터를 생성합니다.
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -34,7 +33,9 @@ export default function App() {
             >
                 {/* Stack.Screen으로 각 화면을 등록합니다. name이 이동할 때 사용하는 이름이 됩니다. */}
                 <Stack.Screen name='Home' component={HomeScreen} options={{ title: '홈' }} />
-                <Stack.Screen name='Details' component={DetailsScreen} options={{ title: '상세 정보' }} />
+                <Stack.Screen name='InputS' component={InputScreen} options={{ title: '입력 페이지' }} />
+                <Stack.Screen name='OutputS' component={OutputScreen} options={{ title: '결과 페이지' }} />
+                <Stack.Screen name='MatchInfoS' component={MatchInfoScreen} options={{ title: '매치 정보 페이지' }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

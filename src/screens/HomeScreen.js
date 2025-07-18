@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }) {
                 </View>
                 <View>
                     <Text style={styles.matchTitle}>Start a new match</Text>
-                    <TouchableOpacity style={styles.newMatchButton} onPress={() => navigation.navigate('Details')}>
+                    <TouchableOpacity style={styles.newMatchButton} onPress={() => navigation.navigate('InputS')}>
                         <Text style={styles.newMatchButtonText}>New Match</Text>
                     </TouchableOpacity>
                 </View>
