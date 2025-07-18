@@ -1,21 +1,89 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-// 모든 스크린 컴포넌트는 'navigation' prop을 자동으로 받습니다.
+const screenHeight = Dimensions.get('window').height - 275;
+
 export default function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>홈 화면</Text>
-            <Button
-                title='상세 페이지로 이동'
-                // 'Details'는 App.js에서 등록할 화면의 이름입니다.
-                onPress={() => navigation.navigate('Details')}
-            />
+            <View style={styles.h2Cont}>
+                <Text style={styles.h2}>Hello,</Text>
+                <Text style={styles.h2}>YoonGu Kwon</Text>
+            </View>
+            <View style={styles.matchCont}>
+                <View>
+                    <Image
+                        source={require('../../assets/loader.png')}
+                        style={{ width: 70, height: 70, resizeMode: 'cover' }}
+                    />
+                </View>
+                <View>
+                    <Text style={styles.matchTitle}>Start a new match</Text>
+                    <TouchableOpacity style={styles.newMatchButton} onPress={() => navigation.navigate('Details')}>
+                        <Text style={styles.newMatchButtonText}>New Match</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.prevMatchCont}>
+                <Text style={styles.prevMatchTitle}>Previous Matches</Text>
+                <View style={{ marginTop: 30 }}>
+                    <View style={styles.cardCont}>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                <AntDesign name='calendar' size={15} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>2025/07/17</Text>
+                            </View>
+                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>07:25</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-    text: { fontSize: 24, marginBottom: 20 },
+    container: { position: 'relative', flex: 1 },
+    h2Cont: { marginTop: 40, marginHorizontal: 20 },
+    matchCont: {
+        margin: 20,
+        padding: 20,
+        backgroundColor: '#1d1d1d',
+        borderRadius: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 25,
+    },
+    prevMatchCont: {
+        padding: 20,
+        height: screenHeight,
+        backgroundColor: '#1d1d1d',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+    },
+    cardCont: { backgroundColor: '#4A4A4A', marginHorizontal: 10, padding: 15, borderRadius: 10 },
+    h2: { fontSize: 24, fontWeight: '500' },
+    matchTitle: { fontSize: 16, fontWeight: '400', color: '#fff' },
+    prevMatchTitle: { fontSize: 20, fontWeight: 500, color: '#fff' },
+    newMatchButton: {
+        backgroundColor: '#5A86F1',
+        borderRadius: 30,
+        paddingVertical: 5,
+        paddingHorizontal: 50,
+        marginTop: 10,
+    },
+    newMatchButtonText: {
+        color: 'black',
+        textAlign: 'center',
+        fontWeight: 600,
+    },
 });
