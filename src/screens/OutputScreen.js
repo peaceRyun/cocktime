@@ -74,7 +74,7 @@ export default function OutputScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, position: 'relative' },
+    container: { flex: 1, position: 'relative', backgroundColor: '#d9e2f8' },
     headerCont: {
         display: 'flex',
         flexDirection: 'row',

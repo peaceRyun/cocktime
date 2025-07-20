@@ -30,12 +30,12 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardCont}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='calendar' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>2025/07/17</Text>
+                                <AntDesign name='calendar' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>2025/07/17</Text>
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>07:25</Text>
+                                <AntDesign name='clockcircleo' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>07:25</Text>
                             </View>
                         </View>
                         <View>
@@ -54,7 +54,7 @@ export default function HomeScreen({ navigation }) {
                                     <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
                                 </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                    <AntDesign name='checkcircle' size={15} color='#5A86F1' />
+                                    <AntDesign name='checkcircle' size={20} color='#5A86F1' />
                                     <Text style={{ fontSize: 15, color: '#fff' }}>25</Text>
                                 </View>
                             </View>
@@ -97,12 +97,12 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardCont}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='calendar' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>2025/07/17</Text>
+                                <AntDesign name='calendar' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>2025/07/17</Text>
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>07:25</Text>
+                                <AntDesign name='clockcircleo' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>07:25</Text>
                             </View>
                         </View>
                         <View>
@@ -121,7 +121,7 @@ export default function HomeScreen({ navigation }) {
                                     <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
                                 </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                    <AntDesign name='checkcircle' size={15} color='#5A86F1' />
+                                    <AntDesign name='checkcircle' size={20} color='#5A86F1' />
                                     <Text style={{ fontSize: 15, color: '#fff' }}>25</Text>
                                 </View>
                             </View>
@@ -164,12 +164,12 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardCont}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='calendar' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>2025/07/17</Text>
+                                <AntDesign name='calendar' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>2025/07/17</Text>
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#5A86F1' }}>07:25</Text>
+                                <AntDesign name='clockcircleo' size={20} color='#5A86F1' />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#ffffffff' }}>07:25</Text>
                             </View>
                         </View>
                         <View>
@@ -188,7 +188,7 @@ export default function HomeScreen({ navigation }) {
                                     <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
                                 </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                    <AntDesign name='checkcircle' size={15} color='#5A86F1' />
+                                    <AntDesign name='checkcircle' size={20} color='#5A86F1' />
                                     <Text style={{ fontSize: 15, color: '#fff' }}>25</Text>
                                 </View>
                             </View>
@@ -235,12 +235,12 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { position: 'relative', flex: 1, backgroundColor: '#d9e2f8' },
+    container: { position: 'relative', flex: 1, backgroundColor: '#00BFFF' },
     h2Cont: { marginTop: 40, marginHorizontal: 20 },
     matchCont: {
         margin: 20,
         padding: 20,
-        backgroundColor: '#1d1d1d',
+        backgroundColor: '#383838',
         borderRadius: 10,
         display: 'flex',
         flexDirection: 'row',
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     prevMatchCont: {
         padding: 20,
         height: screenHeight,
-        backgroundColor: '#1d1d1d',
+        backgroundColor: '#383838',
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -259,12 +259,12 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
     },
-    cardCont: { backgroundColor: '#4A4A4A', marginHorizontal: 10, padding: 15, borderRadius: 10 },
+    cardCont: { backgroundColor: '#555555ff', marginHorizontal: 10, padding: 15, borderRadius: 10 },
     h2: { fontSize: 24, fontWeight: '500' },
     matchTitle: { fontSize: 16, fontWeight: '400', color: '#fff' },
     prevMatchTitle: { fontSize: 20, fontWeight: 500, color: '#fff' },
     newMatchButton: {
-        backgroundColor: '#5A86F1',
+        backgroundColor: '#00BFFF',
         borderRadius: 30,
         paddingVertical: 5,
         paddingHorizontal: 50,

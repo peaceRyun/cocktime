@@ -1,9 +1,15 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import ServeIndicator from '../components/matchinfo/ServeIndicator';
 
 const screenHeight = Dimensions.get('window').height - 100;
 
 export default function MatchInfoScreen({ navigation }) {
+    const activeServeSec = {
+        borderWidth: 2,
+        borderColor: '#ACE43F',
+        backgroundColor: 'rgba(172, 228, 63, 0.2)',
+    };
     return (
         <View style={styles.container}>
             <View style={styles.headerCont}>
@@ -53,15 +59,48 @@ export default function MatchInfoScreen({ navigation }) {
                         <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1 Point</Text>
                     </TouchableOpacity>
                     <View style={styles.courtCont}>
+                        {/* 코트 선 */}
+                        <View style={styles.topSec}></View>
+                        <View style={styles.bottomSec}></View>
+                        <View style={styles.hLineThick}></View>
+                        <View style={styles.hLineTop}></View>
+                        <View style={styles.hLineBottom}></View>
+                        <View style={styles.vLineTopHalf}></View>
+                        <View style={styles.vLineBottomHalf}></View>
                         <View style={styles.vLineLeft}></View>
                         <View style={styles.vLineRight}></View>
-                        <View style={styles.topSec}></View>
-                        <View style={styles.vLineTopHalf}></View>
-                        <View style={styles.hLineTop}></View>
-                        <View style={styles.hLineThick}></View>
-                        <View style={styles.hLineBottom}></View>
-                        <View style={styles.vLineBottomHalf}></View>
-                        <View style={styles.bottomSec}></View>
+                        {/* 이름 */}
+                        <View style={styles.topServeSec}>
+                            <TouchableOpacity style={styles.swapCont}>
+                                <AntDesign name='swap' size={30} color='white' />
+                            </TouchableOpacity>
+                            <View style={[styles.topLeftSec, activeServeSec]}>
+                                <Text style={{ color: '#fff' }}>홍길동1</Text>
+                                <ServeIndicator top='' bottom='0' left='' right='0' />
+                            </View>
+                            <View style={styles.topRightSec}>
+                                <Text style={{ color: '#fff' }}>홍길동2</Text>
+                            </View>
+                        </View>
+                        <View style={styles.bottomServeSec}>
+                            <TouchableOpacity style={styles.swapCont}>
+                                <AntDesign name='swap' size={30} color='white' />
+                            </TouchableOpacity>
+                            <View style={styles.bottomLeftSec}>
+                                <Text style={{ color: '#fff' }}>홍길동3</Text>
+                            </View>
+                            <View style={styles.bottomRightSec}>
+                                <Text style={{ color: '#fff' }}>홍길동4</Text>
+                            </View>
+                        </View>
+                        <View style={styles.iconsCont}>
+                            <TouchableOpacity style={[styles.swapContMid, { transform: [{ rotate: '90deg' }] }]}>
+                                <AntDesign name='swap' size={30} color='white' />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.swapContMid}>
+                                <AntDesign name='retweet' size={30} color='white' />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <TouchableOpacity style={styles.plusPointCont}>
                         <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1 Point</Text>
@@ -73,7 +112,7 @@ export default function MatchInfoScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, position: 'relative' },
+    container: { flex: 1, position: 'relative', backgroundColor: '#d9e2f8' },
     headerCont: {
         display: 'flex',
         flexDirection: 'row',
@@ -220,7 +259,7 @@ const styles = StyleSheet.create({
     },
     vLineTopHalf: {
         position: 'absolute',
-        left: 150,
+        left: '50%',
         width: 1,
         height: 110,
         backgroundColor: '#fff',
@@ -228,11 +267,82 @@ const styles = StyleSheet.create({
     },
     vLineBottomHalf: {
         position: 'absolute',
-        left: 150,
+        left: '50%',
         bottom: 0,
         width: 1,
         height: 105,
         backgroundColor: '#fff',
         opacity: 0.4,
+    },
+    topServeSec: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 110,
+        zIndex: 20,
+        marginHorizontal: 20,
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    bottomServeSec: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 105,
+        zIndex: 20,
+        marginHorizontal: 20,
+        // backgroundColor: 'rgba(187, 154, 154, 0.4)',
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    topLeftSec: {
+        flex: 1,
+        backgroundColor: 'rgba(187, 154, 154, 0.4)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    topRightSec: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomLeftSec: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomRightSec: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    swapCont: {
+        position: 'absolute',
+        top: '40%',
+        left: '43%',
+        zIndex: 30,
+        borderRadius: 5,
+        backgroundColor: '#1d1d1d',
+        padding: 3,
+    },
+    swapContMid: {
+        borderRadius: 5,
+        backgroundColor: '#1d1d1d',
+        padding: 3,
+    },
+    iconsCont: {
+        position: 'absolute',
+        top: '45%',
+        left: '28%',
+        zIndex: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 60,
     },
 });
