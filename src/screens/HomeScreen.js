@@ -1,17 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const screenHeight = Dimensions.get('window').height - 275;
 
 export default function HomeScreen({ navigation }) {
     return (
-        <LinearGradient
-            colors={['#ffffff', '#613A8D']}
-            style={styles.container}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-        >
+        <View style={styles.container}>
+            <Image
+                source={require('../../assets/bg_gradient.png')}
+                style={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }}
+            />
             <View style={styles.h2Cont}>
                 <Text style={styles.h2}>안녕하세요,</Text>
                 <Text style={styles.h2}>권윤구 님</Text>
@@ -39,7 +37,7 @@ export default function HomeScreen({ navigation }) {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 gap: 10,
-                                borderBottomColor: '#3a3a3aff',
+                                borderBottomColor: '#3a3a3a',
                                 borderBottomWidth: 1,
                                 paddingBottom: 9,
                             }}
@@ -111,7 +109,7 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </View>
             </View>
-        </LinearGradient>
+        </View>
     );
 }
 

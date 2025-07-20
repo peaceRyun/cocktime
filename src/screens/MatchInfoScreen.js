@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ServeIndicator from '../components/matchinfo/ServeIndicator';
 
@@ -12,6 +12,10 @@ export default function MatchInfoScreen({ navigation }) {
     };
     return (
         <View style={styles.container}>
+            <Image
+                source={require('../../assets/bg_gradient.png')}
+                style={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }}
+            />
             <View style={styles.headerCont}>
                 <View style={styles.headerLeft}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

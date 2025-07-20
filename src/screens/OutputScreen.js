@@ -1,9 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function OutputScreen({ navigation }) {
     return (
         <View style={styles.container}>
+            <Image
+                source={require('../../assets/bg_gradient.png')}
+                style={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }}
+            />
             <View style={styles.headerCont}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <AntDesign name='leftcircle' size={24} color='black' />
