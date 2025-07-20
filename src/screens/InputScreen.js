@@ -28,13 +28,13 @@ export default function InputScreen({ navigation }) {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <AntDesign name='leftcircle' size={24} color='black' />
                 </TouchableOpacity>
-                <Text style={styles.h2}>Input</Text>
+                <Text style={styles.h2}>입력</Text>
             </View>
             <View style={styles.cardCont}>
                 <View style={styles.cardHeader}>
-                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>Num</Text>
-                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>Name</Text>
-                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>Gender</Text>
+                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>번호</Text>
+                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>이름</Text>
+                    <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>성별</Text>
                 </View>
                 <View style={styles.peopleList}>
                     <View style={styles.peopleItem}>
@@ -94,12 +94,12 @@ export default function InputScreen({ navigation }) {
                         paddingVertical: 20,
                     }}
                 >
-                    <Text style={{ color: '#fff', fontWeight: 700, fontSize: 20 }}>Number of Turns : </Text>
+                    <Text style={{ color: '#fff', fontWeight: 700, fontSize: 20 }}>라운드 수 : </Text>
                     <TextInput
                         style={styles.inputCont}
                         value={turns}
                         onChangeText={setTurns}
-                        placeholder='턴 수'
+                        placeholder='라운드 수'
                         placeholderTextColor='#A9A9A9'
                     ></TextInput>
                 </View>

@@ -17,7 +17,7 @@ export default function MatchInfoScreen({ navigation }) {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign name='leftcircle' size={24} color='black' />
                     </TouchableOpacity>
-                    <Text style={styles.h2}>Match Info</Text>
+                    <Text style={styles.h2}>매칭 정보</Text>
                 </View>
                 <View style={styles.clockLabel}>
                     <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
@@ -51,12 +51,12 @@ export default function MatchInfoScreen({ navigation }) {
                 </View>
                 <View style={styles.introCont}>
                     <Text style={{ fontWeight: 700, fontSize: 15, color: '#fff' }}>
-                        홍길동1 to Serve, Love All, Play
+                        홍길동1의 서브, Love All, 플레이
                     </Text>
                 </View>
                 <View style={styles.playCont}>
                     <TouchableOpacity style={styles.plusPointCont}>
-                        <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1 Point</Text>
+                        <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1점</Text>
                     </TouchableOpacity>
                     <View style={styles.courtCont}>
                         {/* 코트 선 */}
@@ -79,7 +79,7 @@ export default function MatchInfoScreen({ navigation }) {
                                 <ServeIndicator top='' bottom='0' left='' right='0' />
                             </View>
                             <View style={styles.topRightSec}>
-                                <Text style={{ color: '#fff' }}>홍길동2</Text>
+                                <Text style={{ color: '#fff' }}>김찬중</Text>
                             </View>
                         </View>
                         <View style={styles.bottomServeSec}>
@@ -87,7 +87,7 @@ export default function MatchInfoScreen({ navigation }) {
                                 <AntDesign name='swap' size={30} color='white' />
                             </TouchableOpacity>
                             <View style={styles.bottomLeftSec}>
-                                <Text style={{ color: '#fff' }}>홍길동3</Text>
+                                <Text style={{ color: '#fff' }}>김선균</Text>
                             </View>
                             <View style={styles.bottomRightSec}>
                                 <Text style={{ color: '#fff' }}>홍길동4</Text>
@@ -103,7 +103,7 @@ export default function MatchInfoScreen({ navigation }) {
                         </View>
                     </View>
                     <TouchableOpacity style={styles.plusPointCont}>
-                        <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1 Point</Text>
+                        <Text style={[{ color: '#fff', fontSize: 15 }]}>+ 1점</Text>
                     </TouchableOpacity>
                 </View>
             </View>

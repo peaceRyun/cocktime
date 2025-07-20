@@ -8,17 +8,17 @@ export default function OutputScreen({ navigation }) {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <AntDesign name='leftcircle' size={24} color='black' />
                 </TouchableOpacity>
-                <Text style={styles.h2}>Output</Text>
+                <Text style={styles.h2}>결과</Text>
             </View>
             <View style={{ marginTop: 30, display: 'flex', gap: 20 }}>
                 <View style={styles.cardCont}>
-                    <Text style={{ fontSize: 20, fontWeight: 700, color: '#5A86F1' }}>Turn 1</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 700, color: '#5A86F1' }}>라운드 1</Text>
                     <View style={styles.teamInfoCont}>
                         <View style={styles.teamInfoHeader}>
-                            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 500 }}>Team 01</Text>
+                            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 500 }}>게임 01</Text>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.startBtn}>
-                                    <Text style={{ fontSize: 15, fontWeight: 700 }}>START</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: 700 }}>시작하기</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -31,7 +31,7 @@ export default function OutputScreen({ navigation }) {
                     </View>
                     <View style={styles.teamInfoCont}>
                         <View style={styles.teamInfoHeader}>
-                            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 500 }}>Team 02</Text>
+                            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 500 }}>게임 02</Text>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                 <View style={styles.clockLabel}>
                                     <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
@@ -41,13 +41,13 @@ export default function OutputScreen({ navigation }) {
                                     onPress={() => navigation.navigate('MatchInfoS')}
                                     style={styles.matchInfoBtn}
                                 >
-                                    <Text style={{ fontSize: 10, fontWeight: 700 }}>Match Info</Text>
+                                    <Text style={{ fontSize: 10, fontWeight: 700 }}>매칭 정보</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('MatchInfoS')}
                                     style={styles.endBtn}
                                 >
-                                    <Text style={{ fontSize: 15, fontWeight: 700 }}>END</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: 700 }}>끝내기</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
