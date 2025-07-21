@@ -1,27 +1,20 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useState } from 'react';
+import useGameStore from '../store/useGameStore';
 
 export default function InputScreen({ navigation }) {
-    const [name, setName] = useState('');
-    const [turns, setTurns] = useState('');
-    const [isGenderChecked, setIsGenderChecked] = useState(false);
+    const { people, addPerson, rounds, setRounds, updatePerson } = useGameStore();
 
     const handleSubmit = () => {
-        // if (!name) {
-        //     Alert.alert('알림', '이름을 입력해주세요.');
-        //     return;
-        // }
-        // if (!isGenderChecked) {
-        //     Alert.alert('알림', '성별 체크해주세요.');
-        //     return;
-        // }
-        // if (!turns) {
-        //     Alert.alert('알림', '턴 수를 입력해주세요.');
-        //     return;
-        // }
+        // Example validation: Check if all names are filled
+        const isDataComplete = people.every((p) => p.name && p.gender);
+        if (!isDataComplete || rounds <= 0) {
+            Alert.alert('알림', '모든 이름, 성별, 라운드 수를 입력해주세요.');
+            return;
+        }
         navigation.navigate('OutputS');
     };
+
     return (
         <View style={styles.container}>
             <Image
@@ -41,47 +34,43 @@ export default function InputScreen({ navigation }) {
                     <Text style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>성별</Text>
                 </View>
                 <View style={styles.peopleList}>
-                    <View style={styles.peopleItem}>
-                        <Text
-                            style={{
-                                color: '#fff',
-                                fontWeight: 700,
-                                fontSize: 20,
-                                marginHorizontal: 10,
-                            }}
-                        >
-                            1.
-                        </Text>
-                        <TextInput
-                            style={styles.inputCont}
-                            value={name}
-                            onChangeText={setName}
-                            placeholder='이름'
-                            placeholderTextColor='#A9A9A9'
-                        ></TextInput>
-                        <View style={styles.genderCheckboxes}>
-                            <TouchableOpacity style={styles.checkboxCont}>
-                                <Text
-                                    style={{ color: '#fff', fontWeight: 400, fontSize: 20 }}
-                                    value={isGenderChecked}
-                                    onValueChange={setIsGenderChecked}
+                    {people.map((person) => (
+                        <View style={styles.peopleItem} key={person.id}>
+                            <Text
+                                style={{
+                                    color: '#fff',
+                                    fontWeight: 700,
+                                    fontSize: 20,
+                                    marginHorizontal: 10,
+                                }}
+                            >
+                                {person.id}.
+                            </Text>
+                            <TextInput
+                                style={styles.inputCont}
+                                value={person.name}
+                                onChangeText={(text) => updatePerson(person.id, 'name', text)}
+                                placeholder='이름'
+                                placeholderTextColor='#A9A9A9'
+                            ></TextInput>
+                            <View style={styles.genderCheckboxes}>
+                                <TouchableOpacity
+                                    style={[styles.checkboxCont, person.gender === 'male' && styles.checkboxSelected]}
+                                    onPress={() => updatePerson(person.id, 'gender', 'male')}
                                 >
-                                    남
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.checkboxCont}>
-                                <Text
-                                    style={{ color: '#fff', fontWeight: 400, fontSize: 20 }}
-                                    value={isGenderChecked}
-                                    onValueChange={setIsGenderChecked}
+                                    <Text style={{ color: '#fff', fontWeight: 400, fontSize: 20 }}>남</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.checkboxCont, person.gender === 'female' && styles.checkboxSelected]}
+                                    onPress={() => updatePerson(person.id, 'gender', 'female')}
                                 >
-                                    여
-                                </Text>
-                            </TouchableOpacity>
+                                    <Text style={{ color: '#fff', fontWeight: 400, fontSize: 20 }}>여</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
+                    ))}
                     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <TouchableOpacity style={{ padding: 20 }}>
+                        <TouchableOpacity style={{ padding: 20 }} onPress={addPerson}>
                             <AntDesign name='pluscircle' size={24} color='#5A86F1' />
                         </TouchableOpacity>
                     </View>
@@ -101,10 +90,11 @@ export default function InputScreen({ navigation }) {
                     <Text style={{ color: '#fff', fontWeight: 700, fontSize: 20 }}>라운드 수 : </Text>
                     <TextInput
                         style={styles.inputCont}
-                        value={turns}
-                        onChangeText={setTurns}
+                        value={rounds.toString()}
+                        onChangeText={(text) => setRounds(parseInt(text) || 0)}
                         placeholder='라운드 수'
                         placeholderTextColor='#A9A9A9'
+                        keyboardType='numeric'
                     ></TextInput>
                 </View>
             </View>
@@ -178,6 +168,10 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         borderRadius: 100,
     },
+    checkboxSelected: {
+        borderColor: '#5A86F1',
+        backgroundColor: '#5A86F1',
+    },
     resultBtn: {
         width: 200,
         backgroundColor: '#5A86F1',
@@ -192,3 +186,4 @@ const styles = StyleSheet.create({
         fontWeight: 700,
     },
 });
+('');
