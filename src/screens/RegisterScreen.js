@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { addUser, getAllUsers, getUser, getUserCount } from '../utils/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { color } from '../styles/globalstyle';
+
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-
-    const [loading, setLoading] = useState(false); // 로딩 상태 추가
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         if (!email || !password) {
@@ -15,15 +18,27 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         setLoading(true);
-        // 여기에 SQLite 회원가입 로직을 추가할 수 있습니다.
-        // 현재는 임시로 성공 처리 후 Home으로 이동합니다.
         try {
-            // 실제 SQLite 로직이 들어갈 자리
-            console.log('회원가입 시도:', email, password);
-            await new Promise((resolve) => setTimeout(resolve, 1000)); // 비동기 작업 시뮬레이션
-            Alert.alert('성공', '회원가입이 완료되었습니다.');
-            navigation.navigate('Home'); // 성공 시 Home 화면으로 이동
+            const existingUser = await getUser(email);
+            if (existingUser) {
+                Alert.alert('회원가입 실패', '이미 존재하는 이메일입니다.');
+            } else {
+                await addUser(email, password);
+
+                //디버깅용
+                const allUsers = await getAllUsers();
+                const userCount = await getUserCount();
+
+                // AsyncStorage에 이메일 저장
+                await AsyncStorage.setItem('userEmail', email);
+
+                Alert.alert('성공', '회원가입이 완료되었습니다.');
+
+                // 이메일을 파라미터로 전달
+                navigation.navigate('Home', { userEmail: email });
+            }
         } catch (e) {
+            console.error('회원가입 오류:', e);
             Alert.alert('회원가입 실패', '알 수 없는 오류가 발생했습니다.');
         } finally {
             setLoading(false);
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     btnCont: {
-        backgroundColor: '#5A86F1',
+        backgroundColor: color.primary50,
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 10,

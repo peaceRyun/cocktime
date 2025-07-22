@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ServeIndicator from '../components/matchinfo/ServeIndicator';
+import { color } from '../styles/globalstyle';
 
 const screenHeight = Dimensions.get('window').height - 100;
 
@@ -24,7 +25,7 @@ export default function MatchInfoScreen({ navigation }) {
                     <Text style={styles.h2}>매칭 정보</Text>
                 </View>
                 <View style={styles.clockLabel}>
-                    <AntDesign name='clockcircleo' size={15} color='#5A86F1' />
+                    <AntDesign name='clockcircleo' size={15} color={color.primary50} />
                     <Text style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>14: 05</Text>
                 </View>
             </View>
@@ -37,11 +38,11 @@ export default function MatchInfoScreen({ navigation }) {
                             <Text style={{ color: '#fff', fontSize: 15 }}>홍길동2</Text>
                         </View>
                         <View style={styles.rightCont}>
-                            <AntDesign name='checkcircle' size={15} color='#5A86F1' />
+                            <AntDesign name='checkcircle' size={15} color={color.primary50} />
                             <Text style={{ color: '#fff', fontSize: 15 }}>0</Text>
                         </View>
                     </View>
-                    <Text style={{ color: '#5A86F1', fontSize: 14 }}>VS</Text>
+                    <Text style={{ color: color.primary50, fontSize: 14 }}>VS</Text>
                     <View style={styles.teamCont}>
                         <View style={styles.leftCont}>
                             <View style={styles.countryCont}></View>
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
         width: 250,
         paddingVertical: 7,
         paddingHorizontal: 15,
-        backgroundColor: '#5A86F1',
+        backgroundColor: color.primary50,
         borderRadius: 20,
         display: 'flex',
         flexDirection: 'row',

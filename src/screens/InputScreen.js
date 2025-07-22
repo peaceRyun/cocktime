@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useGameStore from '../store/useGameStore';
+import { color } from '../styles/globalstyle';
 
 export default function InputScreen({ navigation }) {
     const { people, addPerson, rounds, setRounds, updatePerson } = useGameStore();
@@ -71,7 +72,7 @@ export default function InputScreen({ navigation }) {
                     ))}
                     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <TouchableOpacity style={{ padding: 20 }} onPress={addPerson}>
-                            <AntDesign name='pluscircle' size={24} color='#5A86F1' />
+                            <AntDesign name='pluscircle' size={24} color={color.primary50} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -169,12 +170,12 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     checkboxSelected: {
-        borderColor: '#5A86F1',
-        backgroundColor: '#5A86F1',
+        borderColor: color.primary50,
+        backgroundColor: color.primary50,
     },
     resultBtn: {
         width: 200,
-        backgroundColor: '#5A86F1',
+        backgroundColor: color.primary50,
         paddingVertical: 20,
         display: 'flex',
         alignItems: 'center',

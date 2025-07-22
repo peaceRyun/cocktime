@@ -1,23 +1,26 @@
 {
-    "expo": {
-        "name": "my-app",
-        "slug": "my-app",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "userInterfaceStyle": "light",
-        "newArchEnabled": true,
-        "splash": {
-            "image": "./assets/splash-icon.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "packagerOpts": {
-            "dev": true
-        },
-        "plugins": ["expo-font"]
-    }
+  "expo": {
+    "name": "my-app",
+    "slug": "my-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "packagerOpts": {
+      "dev": true
+    },
+    "plugins": [
+      "expo-font",
+      "expo-sqlite"
+    ]
+  }
 }

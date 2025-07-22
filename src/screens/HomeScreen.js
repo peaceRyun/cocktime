@@ -1,9 +1,52 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import { color } from '../styles/globalstyle';
 
 const screenHeight = Dimensions.get('window').height - 275;
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, route }) {
+    const [userEmail, setUserEmail] = useState('');
+
+    useEffect(() => {
+        const loadUserEmail = async () => {
+            try {
+                // route params에서 먼저 확인
+                const routeEmail = route.params?.userEmail;
+
+                if (routeEmail) {
+                    setUserEmail(routeEmail);
+                } else {
+                    // AsyncStorage에서 이메일 가져오기
+                    const storedEmail = await AsyncStorage.getItem('userEmail');
+                    if (storedEmail) {
+                        setUserEmail(storedEmail);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user email:', error);
+            }
+        };
+
+        loadUserEmail();
+    }, [route.params]);
+
+    // 이메일에서 사용자 이름 추출 (@ 앞부분)
+    const getUserName = (email) => {
+        if (!email) return '사용자';
+        return email.split('@')[0];
+    };
+
+    const handleLogOut = async () => {
+        try {
+            await AsyncStorage.clear(); // 모든 AsyncStorage 데이터 지우기
+            navigation.replace('Register'); // RegisterScreen으로 이동 (뒤로가기 방지)
+        } catch (e) {
+            console.error('로그아웃 오류:', e);
+            Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
+        }
+    };
     return (
         <View style={styles.container}>
             <Image
@@ -11,8 +54,13 @@ export default function HomeScreen({ navigation }) {
                 style={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }}
             />
             <View style={styles.h2Cont}>
-                <Text style={styles.h2}>안녕하세요,</Text>
-                <Text style={styles.h2}>권윤구 님</Text>
+                <View>
+                    <Text style={styles.h2}>안녕하세요,</Text>
+                    <Text style={styles.h2}>{getUserName(userEmail)} 님</Text>
+                </View>
+                <TouchableOpacity style={styles.btnLogOutCont} onPress={handleLogOut}>
+                    <Text style={{ fontWeight: 600 }}>로그아웃</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.matchCont}>
                 <View>
@@ -43,12 +91,14 @@ export default function HomeScreen({ navigation }) {
                             }}
                         >
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='calendar' size={20} color='#9966CC' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#9966CC' }}>2025/07/17</Text>
+                                <AntDesign name='calendar' size={20} color={color.primary50} />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: color.primary50 }}>
+                                    2025/07/17
+                                </Text>
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='clockcircleo' size={20} color='#9966CC' />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: '#9966CC' }}>07:25</Text>
+                                <AntDesign name='clockcircleo' size={20} color={color.primary50} />
+                                <Text style={{ fontWeight: 600, fontSize: 15, color: color.primary50 }}>07:25</Text>
                             </View>
                         </View>
                         <View>
@@ -67,11 +117,11 @@ export default function HomeScreen({ navigation }) {
                                     <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
                                 </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                    <AntDesign name='checkcircle' size={20} color='#9966CC' />
+                                    <AntDesign name='checkcircle' size={20} color={color.primary50} />
                                     <Text style={{ fontSize: 15, color: '#fff' }}>25</Text>
                                 </View>
                             </View>
-                            <Text style={{ fontSize: 14, color: '#9966CC', marginVertical: 5 }}>VS</Text>
+                            <Text style={{ fontSize: 14, color: color.primary50, marginVertical: 5 }}>VS</Text>
                             <View
                                 style={{
                                     display: 'flex',
@@ -115,7 +165,14 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: { position: 'relative', flex: 1 },
-    h2Cont: { marginTop: 40, marginHorizontal: 20 },
+    h2Cont: {
+        marginTop: 40,
+        marginHorizontal: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     matchCont: {
         margin: 20,
         padding: 20,
@@ -144,11 +201,12 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
     },
+    btnLogOutCont: { paddingHorizontal: 20, paddingVertical: 15, backgroundColor: color.primary50, borderRadius: 10 },
     h2: { fontSize: 24, fontWeight: '500' },
     matchTitle: { fontSize: 16, fontWeight: '400', color: 'white' },
     prevMatchTitle: { fontSize: 20, fontWeight: '500', color: 'white' },
     newMatchButton: {
-        backgroundColor: '#9966CC',
+        backgroundColor: color.primary50,
         borderRadius: 30,
         paddingVertical: 5,
         paddingHorizontal: 50,
