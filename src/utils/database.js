@@ -122,6 +122,24 @@ export const getGamesWithMemberNicknames = async () => {
 };
 
 
+export const getNicknamesByIds = async (userIdsString) => {
+    if (!userIdsString) {
+        return [];
+    }
+    try {
+        const memberIds = userIdsString.split(',').map(id => parseInt(id.trim()));
+        if (memberIds.length === 0) {
+            return [];
+        }
+        const placeholders = memberIds.map(() => '?').join(',');
+        const users = await db.getAllAsync(`SELECT nickname FROM users WHERE user_id IN (${placeholders})`, memberIds);
+        return users.map(u => u.nickname);
+    } catch (error) {
+        console.error('Error fetching nicknames by IDs:', error);
+        throw error;
+    }
+};
+
 // 데이터베이스 파일 내보내기/가져오기
 export const exportDatabase = async () => {
     try {

@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { color } from '../styles/globalstyle';
-import { getGamesWithMemberNicknames } from '../utils/database';
+import { getGamesWithMemberNicknames, getNicknamesByIds } from '../utils/database';
 
 const screenHeight = Dimensions.get('window').height - 275;
 
@@ -16,8 +16,12 @@ export default function HomeScreen({ navigation, route }) {
     const loadGames = async () => {
         try {
             const gamesData = await getGamesWithMemberNicknames();
-            setGames(gamesData);
-            console.log(`gamesData: `, games);
+            const processedGames = await Promise.all(gamesData.map(async (game) => {
+                const teamANicknames = await getNicknamesByIds(game.team_members_A);
+                const teamBNicknames = await getNicknamesByIds(game.team_members_B);
+                return { ...game, teamANicknames, teamBNicknames };
+            }));
+            setGames(processedGames);
         } catch (error) {
             console.error('Error loading games:', error);
         }
@@ -75,16 +79,22 @@ export default function HomeScreen({ navigation, route }) {
                 </Text>
             </View>
             <View style={styles.cardBody}>
-                {item.team_members_A && (
+                {item.teamANicknames && (
                     <View style={styles.membersContainer}>
                         <View style={styles.rightCont}>
                             <View style={styles.countryCont}></View>
-                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 0 ? 1 : 0.4 }}>
-                                홍길동1
-                            </Text>
-                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 0 ? 1 : 0.4 }}>
-                                홍길동2
-                            </Text>
+                            {item.teamANicknames.map((nickname, index) => (
+                                <Text
+                                    key={`teamA-${index}`}
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#fff',
+                                        opacity: item.winning_team === 0 ? 1 : 0.4,
+                                    }}
+                                >
+                                    {nickname}
+                                </Text>
+                            ))}
                         </View>
 
                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
@@ -98,16 +108,22 @@ export default function HomeScreen({ navigation, route }) {
                     </View>
                 )}
                 <Text style={{ color: color.primary50 }}>VS</Text>
-                {item.team_members_B && (
+                {item.teamBNicknames && (
                     <View style={styles.membersContainer}>
                         <View style={styles.rightCont}>
                             <View style={styles.countryCont}></View>
-                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 1 ? 1 : 0.4 }}>
-                                홍길동1
-                            </Text>
-                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 1 ? 1 : 0.4 }}>
-                                홍길동2
-                            </Text>
+                            {item.teamBNicknames.map((nickname, index) => (
+                                <Text
+                                    key={`teamB-${index}`}
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#fff',
+                                        opacity: item.winning_team === 1 ? 1 : 0.4,
+                                    }}
+                                >
+                                    {nickname}
+                                </Text>
+                            ))}
                         </View>
 
                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
