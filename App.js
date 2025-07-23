@@ -27,14 +27,11 @@ export default function App() {
                 await initDatabase();
                 console.log('Database initialized.');
 
-                // 모든 사용자 목록 확인 (디버깅용)
-                await getAllUsers();
-
                 // 저장된 사용자 정보 확인
-                const userEmail = await AsyncStorage.getItem('userEmail');
-                setIsLoggedIn(!!userEmail); // 이메일이 있으면 true, 없으면 false
+                const userNickname = await AsyncStorage.getItem('userNickname');
+                setIsLoggedIn(!!userNickname); // 닉네임이 있으면 true, 없으면 false
 
-                console.log('User login status:', !!userEmail);
+                console.log('User login status:', !!userNickname);
             } catch (err) {
                 console.error('App initialization failed:', err);
                 setIsLoggedIn(false);

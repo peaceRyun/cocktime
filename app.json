@@ -1,22 +1,29 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "cocktime",
+    "slug": "cocktime",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.peaceryun.cocktime"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.peaceryun.cocktime"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "packagerOpts": {
-      "dev": true
     },
     "plugins": [
       "expo-font",

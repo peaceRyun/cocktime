@@ -1,74 +1,106 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList, RefreshControl } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { color } from '../styles/globalstyle';
+import { getGamesWithMemberNicknames } from '../utils/database';
 
 const screenHeight = Dimensions.get('window').height - 275;
 
 export default function HomeScreen({ navigation, route }) {
-    const [userEmail, setUserEmail] = useState('');
+    const [userNickname, setUserNickname] = useState('');
+    const [games, setGames] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => {
-        const loadUserEmail = async () => {
-            try {
-                // route params에서 먼저 확인
-                const routeEmail = route.params?.userEmail;
-
-                if (routeEmail) {
-                    setUserEmail(routeEmail);
-                } else {
-                    // AsyncStorage에서 이메일 가져오기
-                    const storedEmail = await AsyncStorage.getItem('userEmail');
-                    if (storedEmail) {
-                        setUserEmail(storedEmail);
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading user email:', error);
-            }
-        };
-
-        loadUserEmail();
-    }, [route.params]);
-
-    // 이메일에서 사용자 이름 추출 (@ 앞부분)
-    const getUserName = (email) => {
-        if (!email) return '사용자';
-        return email.split('@')[0];
+    const loadGames = async () => {
+        try {
+            const gamesData = await getGamesWithMemberNicknames();
+            setGames(gamesData);
+        } catch (error) {
+            console.error('Error loading games:', error);
+        }
     };
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        loadGames().then(() => setRefreshing(false));
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            const loadUserData = async () => {
+                try {
+                    const routeNickname = route.params?.userNickname;
+                    if (routeNickname) {
+                        setUserNickname(routeNickname);
+                    } else {
+                        const storedNickname = await AsyncStorage.getItem('userNickname');
+                        if (storedNickname) {
+                            setUserNickname(storedNickname);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading user nickname:', error);
+                }
+            };
+
+            loadUserData();
+            loadGames();
+        }, [route.params])
+    );
 
     const handleLogOut = async () => {
         try {
-            await AsyncStorage.clear(); // 모든 AsyncStorage 데이터 지우기
-            navigation.replace('Register'); // RegisterScreen으로 이동 (뒤로가기 방지)
+            await AsyncStorage.clear();
+            navigation.replace('Register');
         } catch (e) {
             console.error('로그아웃 오류:', e);
             Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
         }
     };
+
+    const renderGameItem = ({ item }) => (
+        <View style={styles.cardCont}>
+            <View style={styles.cardHeader}>
+                <View style={styles.cardHeaderLeft}>
+                    <AntDesign name='calendar' size={20} color={color.primary50} />
+                    <Text style={styles.cardHeaderText}>{item.start_time ? new Date(item.start_time).toLocaleDateString() : '날짜 정보 없음'}</Text>
+                </View>
+                <Text style={styles.cardHeaderText}>{item.start_time ? new Date(item.start_time).toLocaleTimeString() : ''}</Text>
+            </View>
+            <View style={styles.cardBody}>
+                <Text style={styles.memoText}>{item.memo || '메모 없음'}</Text>
+                {item.nicknames && (
+                    <View style={styles.membersContainer}>
+                        <Text style={styles.membersTitle}>참여자:</Text>
+                        <Text style={styles.membersText}>{item.nicknames.join(', ')}</Text>
+                    </View>
+                )}
+            </View>
+        </View>
+    );
+
     return (
         <View style={styles.container}>
             <Image
                 source={require('../../assets/bg_gradient.png')}
-                style={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
             <View style={styles.h2Cont}>
                 <View>
                     <Text style={styles.h2}>안녕하세요,</Text>
-                    <Text style={styles.h2}>{getUserName(userEmail)} 님</Text>
+                    <Text style={styles.h2}>{userNickname} 님</Text>
                 </View>
                 <TouchableOpacity style={styles.btnLogOutCont} onPress={handleLogOut}>
-                    <Text style={{ fontWeight: 600 }}>로그아웃</Text>
+                    <Text style={{ fontWeight: '600' }}>로그아웃</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.matchCont}>
-                <View>
-                    <Image
-                        source={require('../../assets/loader.png')}
-                        style={{ width: 70, height: 70, resizeMode: 'cover' }}
-                    />
-                </View>
+                <Image
+                    source={require('../../assets/loader.png')}
+                    style={{ width: 70, height: 70, resizeMode: 'cover' }}
+                />
                 <View>
                     <Text style={styles.matchTitle}>새 게임을 시작하세요!</Text>
                     <TouchableOpacity style={styles.newMatchButton} onPress={() => navigation.navigate('InputS')}>
@@ -78,97 +110,35 @@ export default function HomeScreen({ navigation, route }) {
             </View>
             <View style={styles.prevMatchCont}>
                 <Text style={styles.prevMatchTitle}>이전 매치</Text>
-                <View style={{ marginTop: 30, display: 'flex', gap: 30 }}>
-                    <View style={styles.cardCont}>
-                        <View
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                gap: 10,
-                                borderBottomColor: '#3a3a3a',
-                                borderBottomWidth: 1,
-                                paddingBottom: 9,
-                            }}
-                        >
-                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='calendar' size={20} color={color.primary50} />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: color.primary50 }}>
-                                    2025/07/17
-                                </Text>
-                            </View>
-                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <AntDesign name='clockcircleo' size={20} color={color.primary50} />
-                                <Text style={{ fontWeight: 600, fontSize: 15, color: color.primary50 }}>07:25</Text>
-                            </View>
+                <FlatList
+                    data={games}
+                    renderItem={renderGameItem}
+                    keyExtractor={(item) => item.game_id.toString()}
+                    contentContainerStyle={{ marginTop: 20, paddingBottom: 40 }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            colors={[color.primary50]}
+                            tintColor={color.primary50}
+                        />
+                    }
+                    ListEmptyComponent={
+                        <View style={styles.emptyListContainer}>
+                            <Text style={styles.emptyListText}>이전 매치 기록이 없습니다.</Text>
                         </View>
-                        <View>
-                            <View
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    marginTop: 20,
-                                }}
-                            >
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <View style={styles.countryCont}></View>
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>홍길동1</Text>
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
-                                </View>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                    <AntDesign name='checkcircle' size={20} color={color.primary50} />
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>25</Text>
-                                </View>
-                            </View>
-                            <Text style={{ fontSize: 14, color: color.primary50, marginVertical: 5 }}>VS</Text>
-                            <View
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    opacity: 0.4,
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: 5,
-                                    }}
-                                >
-                                    <View style={styles.countryCont}></View>
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>홍길동1</Text>
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>홍길동2</Text>
-                                </View>
-                                <View
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: 15,
-                                    }}
-                                >
-                                    {/* <AntDesign name='checkcircle' size={15} color='#5A86F1' /> */}
-                                    <Text style={{ fontSize: 15, color: '#fff' }}>20</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                    }
+                />
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { position: 'relative', flex: 1 },
+    container: { flex: 1 },
     h2Cont: {
         marginTop: 40,
         marginHorizontal: 20,
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -178,13 +148,12 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#1d1d1d',
         borderRadius: 10,
-        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         gap: 25,
     },
     prevMatchCont: {
-        padding: 20,
+        paddingHorizontal: 20,
         height: screenHeight,
         backgroundColor: '#1d1d1d',
         position: 'absolute',
@@ -200,11 +169,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         padding: 15,
         borderRadius: 10,
+        marginBottom: 15,
     },
     btnLogOutCont: { paddingHorizontal: 20, paddingVertical: 15, backgroundColor: color.primary50, borderRadius: 10 },
-    h2: { fontSize: 24, fontWeight: '500' },
+    h2: { fontSize: 24, fontWeight: '500', color: 'white' },
     matchTitle: { fontSize: 16, fontWeight: '400', color: 'white' },
-    prevMatchTitle: { fontSize: 20, fontWeight: '500', color: 'white' },
+    prevMatchTitle: { fontSize: 20, fontWeight: '500', color: 'white', paddingTop: 20 },
     newMatchButton: {
         backgroundColor: color.primary50,
         borderRadius: 30,
@@ -215,13 +185,53 @@ const styles = StyleSheet.create({
     newMatchButtonText: {
         color: 'black',
         textAlign: 'center',
-        fontWeight: 600,
+        fontWeight: '600',
     },
-    countryCont: {
-        width: 20,
-        height: 20,
-        borderRadius: 100,
-        backgroundColor: '#1D1D1D',
-        position: 'relative',
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomColor: '#3a3a3a',
+        borderBottomWidth: 1,
+        paddingBottom: 9,
+    },
+    cardHeaderLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    cardHeaderText: {
+        fontWeight: '600',
+        fontSize: 15,
+        color: color.primary50,
+    },
+    cardBody: {
+        paddingTop: 10,
+    },
+    memoText: {
+        color: 'white',
+        fontSize: 16,
+        marginBottom: 10,
+    },
+    membersContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    membersTitle: {
+        color: color.primary50,
+        fontWeight: 'bold',
+    },
+    membersText: {
+        color: 'white',
+        flexShrink: 1,
+    },
+    emptyListContainer: {
+        marginTop: 50,
+        alignItems: 'center',
+    },
+    emptyListText: {
+        color: '#888',
+        fontSize: 16,
     },
 });
+('');
