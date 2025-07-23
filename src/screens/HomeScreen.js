@@ -16,11 +16,13 @@ export default function HomeScreen({ navigation, route }) {
     const loadGames = async () => {
         try {
             const gamesData = await getGamesWithMemberNicknames();
-            const processedGames = await Promise.all(gamesData.map(async (game) => {
-                const teamANicknames = await getNicknamesByIds(game.team_members_A);
-                const teamBNicknames = await getNicknamesByIds(game.team_members_B);
-                return { ...game, teamANicknames, teamBNicknames };
-            }));
+            const processedGames = await Promise.all(
+                gamesData.map(async (game) => {
+                    const teamANicknames = await getNicknamesByIds(game.team_members_A);
+                    const teamBNicknames = await getNicknamesByIds(game.team_members_B);
+                    return { ...game, teamANicknames, teamBNicknames };
+                })
+            );
             setGames(processedGames);
         } catch (error) {
             console.error('Error loading games:', error);
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     btnLogOutCont: { paddingHorizontal: 20, paddingVertical: 15, backgroundColor: color.primary50, borderRadius: 10 },
-    h2: { fontSize: 24, fontWeight: '500', color: 'black' },
+    h2: { fontSize: 24, fontWeight: '500', color: 'white' },
     matchTitle: { fontSize: 16, fontWeight: '400', color: 'white' },
     prevMatchTitle: { fontSize: 20, fontWeight: '500', color: 'white', paddingTop: 20 },
     newMatchButton: {
