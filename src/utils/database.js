@@ -100,27 +100,6 @@ export const getAllUsers = async () => {
 };
 
 // Game 관련 함수
-export const addGame = async (memo = '') => {
-    try {
-        const result = await db.runAsync('INSERT INTO games (memo) VALUES (?);', [memo]);
-        console.log(`Game added with ID: ${result.lastInsertRowId}`);
-        return result.lastInsertRowId;
-    } catch (error) {
-        console.error('Error adding game:', error);
-        throw error;
-    }
-};
-
-export const getAllGames = async () => {
-    try {
-        const result = await db.getAllAsync('SELECT * FROM games ORDER BY game_date DESC;');
-        return result;
-    } catch (error) {
-        console.error('Error fetching all games:', error);
-        throw error;
-    }
-};
-
 export const getGamesWithMemberNicknames = async () => {
     try {
         const games = await db.getAllAsync('SELECT * FROM games ORDER BY start_time DESC;');
@@ -138,33 +117,6 @@ export const getGamesWithMemberNicknames = async () => {
         return gamesWithNicknames;
     } catch (error) {
         console.error('Error fetching games with member nicknames:', error);
-        throw error;
-    }
-};
-
-// Event 관련 함수
-export const addEvent = async (game_id, event_type, player_count) => {
-    try {
-        const result = await db.runAsync('INSERT INTO events (game_id, event_type, player_count) VALUES (?, ?, ?);', [game_id, event_type, player_count]);
-        console.log(`Event added with ID: ${result.lastInsertRowId}`);
-        return result.lastInsertRowId;
-    } catch (error) {
-        console.error('Error adding event:', error);
-        throw error;
-    }
-};
-
-// Round 관련 함수
-export const addRound = async (event_id, round_number, serve_user_id, winner_user_id, score_difference) => {
-    try {
-        const result = await db.runAsync(
-            'INSERT INTO rounds (event_id, round_number, serve_user_id, winner_user_id, score_difference) VALUES (?, ?, ?, ?, ?);',
-            [event_id, round_number, serve_user_id, winner_user_id, score_difference]
-        );
-        console.log(`Round added with ID: ${result.lastInsertRowId}`);
-        return result;
-    } catch (error) {
-        console.error('Error adding round:', error);
         throw error;
     }
 };

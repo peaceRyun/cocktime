@@ -1,7 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView, RefreshControl } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { color } from '../styles/globalstyle';
 import { getGamesWithMemberNicknames } from '../utils/database';
@@ -17,6 +17,7 @@ export default function HomeScreen({ navigation, route }) {
         try {
             const gamesData = await getGamesWithMemberNicknames();
             setGames(gamesData);
+            console.log(`gamesData: `, games);
         } catch (error) {
             console.error('Error loading games:', error);
         }
@@ -61,20 +62,62 @@ export default function HomeScreen({ navigation, route }) {
     };
 
     const renderGameItem = ({ item }) => (
-        <View style={styles.cardCont}>
+        <View key={item.game_id.toString()} style={styles.cardCont}>
             <View style={styles.cardHeader}>
                 <View style={styles.cardHeaderLeft}>
                     <AntDesign name='calendar' size={20} color={color.primary50} />
-                    <Text style={styles.cardHeaderText}>{item.start_time ? new Date(item.start_time).toLocaleDateString() : '날짜 정보 없음'}</Text>
+                    <Text style={styles.cardHeaderText}>
+                        {item.start_time ? new Date(item.start_time).toLocaleDateString() : '날짜 정보 없음'}
+                    </Text>
                 </View>
-                <Text style={styles.cardHeaderText}>{item.start_time ? new Date(item.start_time).toLocaleTimeString() : ''}</Text>
+                <Text style={styles.cardHeaderText}>
+                    {item.start_time ? new Date(item.start_time).toLocaleTimeString() : ''}
+                </Text>
             </View>
             <View style={styles.cardBody}>
-                <Text style={styles.memoText}>{item.memo || '메모 없음'}</Text>
-                {item.nicknames && (
+                {item.team_members_A && (
                     <View style={styles.membersContainer}>
-                        <Text style={styles.membersTitle}>참여자:</Text>
-                        <Text style={styles.membersText}>{item.nicknames.join(', ')}</Text>
+                        <View style={styles.rightCont}>
+                            <View style={styles.countryCont}></View>
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 0 ? 1 : 0.4 }}>
+                                홍길동1
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 0 ? 1 : 0.4 }}>
+                                홍길동2
+                            </Text>
+                        </View>
+
+                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                            {item.winning_team === 0 ? (
+                                <AntDesign name='checkcircle' size={20} color={color.primary50} />
+                            ) : null}
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 0 ? 1 : 0.4 }}>
+                                {item.team_score_A}
+                            </Text>
+                        </View>
+                    </View>
+                )}
+                <Text style={{ color: color.primary50 }}>VS</Text>
+                {item.team_members_B && (
+                    <View style={styles.membersContainer}>
+                        <View style={styles.rightCont}>
+                            <View style={styles.countryCont}></View>
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 1 ? 1 : 0.4 }}>
+                                홍길동1
+                            </Text>
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 1 ? 1 : 0.4 }}>
+                                홍길동2
+                            </Text>
+                        </View>
+
+                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                            {item.winning_team === 1 ? (
+                                <AntDesign name='checkcircle' size={20} color={color.primary50} />
+                            ) : null}
+                            <Text style={{ fontSize: 15, color: '#fff', opacity: item.winning_team === 1 ? 1 : 0.4 }}>
+                                {item.team_score_B}
+                            </Text>
+                        </View>
                     </View>
                 )}
             </View>
@@ -109,11 +152,8 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.prevMatchCont}>
-                <Text style={styles.prevMatchTitle}>이전 매치</Text>
-                <FlatList
-                    data={games}
-                    renderItem={renderGameItem}
-                    keyExtractor={(item) => item.game_id.toString()}
+                <Text style={styles.prevMatchTitle}>과거 이력</Text>
+                <ScrollView
                     contentContainerStyle={{ marginTop: 20, paddingBottom: 40 }}
                     refreshControl={
                         <RefreshControl
@@ -123,12 +163,15 @@ export default function HomeScreen({ navigation, route }) {
                             tintColor={color.primary50}
                         />
                     }
-                    ListEmptyComponent={
+                >
+                    {games.length > 0 ? (
+                        games.map((item) => renderGameItem({ item }))
+                    ) : (
                         <View style={styles.emptyListContainer}>
                             <Text style={styles.emptyListText}>이전 매치 기록이 없습니다.</Text>
                         </View>
-                    }
-                />
+                    )}
+                </ScrollView>
             </View>
         </View>
     );
@@ -172,7 +215,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     btnLogOutCont: { paddingHorizontal: 20, paddingVertical: 15, backgroundColor: color.primary50, borderRadius: 10 },
-    h2: { fontSize: 24, fontWeight: '500', color: 'white' },
+    h2: { fontSize: 24, fontWeight: '500', color: 'black' },
     matchTitle: { fontSize: 16, fontWeight: '400', color: 'white' },
     prevMatchTitle: { fontSize: 20, fontWeight: '500', color: 'white', paddingTop: 20 },
     newMatchButton: {
@@ -206,6 +249,9 @@ const styles = StyleSheet.create({
     },
     cardBody: {
         paddingTop: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 10,
     },
     memoText: {
         color: 'white',
@@ -215,7 +261,7 @@ const styles = StyleSheet.create({
     membersContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 5,
+        justifyContent: 'space-between',
     },
     membersTitle: {
         color: color.primary50,
@@ -233,5 +279,17 @@ const styles = StyleSheet.create({
         color: '#888',
         fontSize: 16,
     },
+    rightCont: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 15,
+    },
+    countryCont: {
+        width: 20,
+        height: 20,
+        borderRadius: 100,
+        backgroundColor: '#1D1D1D',
+        position: 'relative',
+    },
 });
-('');
